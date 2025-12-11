@@ -54,12 +54,12 @@ namespace BadUSB {
     #endif
     
     // Type the URL (works on both)
-    Keyboard.print("https://youtu.be/dQw4w9WgXcQ");
+    Keyboard.print("https://www.youtube.com/watch?v=e-xoYTHebs8&autoplay=1&mute=1");
     delay(600);  // Longer delay after typing
     
     // Press Enter to open (explicit press and release)
     Keyboard.press(KEY_RETURN);
-    delay(100);
+    delay(200);
     Keyboard.release(KEY_RETURN);
     
     isRunning = false;
