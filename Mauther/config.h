@@ -95,7 +95,7 @@
 #else
   #define MENU_ITEMS_RTC 0
 #endif
-#define MENU_ITEMS (MENU_ITEMS_BASE + MENU_ITEMS_DIST + MENU_ITEMS_BADUSB + MENU_ITEMS_RTC)
+#define MENU_ITEMS (MENU_ITEMS_BASE + MENU_ITEMS_DIST + MENU_ITEMS_BADUSB + MENU_ITEMS_RTC + 1)  // +1 for Sleep
 
 #define MENU_TIMEOUT_MS 30000  // Return to main screen after 30s
 

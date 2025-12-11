@@ -101,6 +101,14 @@ namespace Display {
     } while (u8g2.nextPage());
   }
 
+  void turnOff() {
+    u8g2.setPowerSave(1);  // Turn off display
+  }
+  
+  void turnOn() {
+    u8g2.setPowerSave(0);  // Turn on display
+  }
+  
   void update() {
     // Placeholder for any display animations or updates
   }

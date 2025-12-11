@@ -21,13 +21,10 @@ namespace RTCModule {
     if (rtc.begin()) {
       rtcAvailable = true;
       
-      // FORCE TIME UPDATE - Remove this after first upload!
-      rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-      
-      // Normal code (uncomment after time is set):
-      // if (rtc.lostPower()) {
-      //   rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-      // }
+      // Only update time if RTC lost power (battery dead)
+      if (rtc.lostPower()) {
+        rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+      }
       
       lastTime = rtc.now();
     }

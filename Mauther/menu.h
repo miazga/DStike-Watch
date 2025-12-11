@@ -29,7 +29,8 @@ namespace Menu {
     MENU_LASER,
     MENU_LED_TEST,
     MENU_BADUSB,
-    MENU_SETTINGS
+    MENU_SETTINGS,
+    MENU_SLEEP
   };
 
   MenuState currentMenu = MENU_MAIN_SCREEN;
@@ -48,8 +49,9 @@ namespace Menu {
     "BadUSB",
     #endif
     #ifdef FEATURE_RTC
-    "Info"
+    "Info",
     #endif
+    "Sleep"
   };
 
   void begin() {
@@ -185,6 +187,12 @@ namespace Menu {
       }
       #endif
       
+      // Last item: Sleep (always enabled)
+      if (menuSelection == itemIndex++) {
+        currentMenu = MENU_SLEEP;
+        return;
+      }
+      
       // Default fallback
       currentMenu = MENU_MAIN_SCREEN;
     }
@@ -294,6 +302,46 @@ namespace Menu {
     }
   }
 
+  void handleSleep() {
+    static bool sleeping = false;
+    
+    if (!sleeping) {
+      // Going to sleep
+      sleeping = true;
+      
+      // Show sleep message
+      u8g2.firstPage();
+      do {
+        u8g2.setFont(u8g2_font_6x10_tf);
+        u8g2.drawStr(20, 25, "Sleep Mode");
+        u8g2.drawStr(10, 40, "Press any btn");
+      } while (u8g2.nextPage());
+      
+      delay(1000);
+      
+      // Turn off all components
+      #ifdef FEATURE_LED
+      Actuators::setLEDOff();
+      #endif
+      
+      #ifdef FEATURE_LASER
+      Actuators::laserOff();
+      #endif
+      
+      // Turn off display
+      Display::turnOff();
+    }
+    
+    // Wait for any button to wake
+    if (Buttons::getLastPressed() != Buttons::BTN_NONE) {
+      // Wake up
+      Display::turnOn();
+      sleeping = false;
+      currentMenu = MENU_MAIN_SCREEN;
+      delay(100); // Debounce
+    }
+  }
+
   void update() {
     checkTimeout();
 
@@ -318,6 +366,9 @@ namespace Menu {
         break;
       case MENU_SETTINGS:
         handleSettings();
+        break;
+      case MENU_SLEEP:
+        handleSleep();
         break;
     }
   }
